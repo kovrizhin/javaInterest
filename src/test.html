@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>List</title>
+    <style>
+        select, input[type="text"] {
+        width: 160px;
+        box-sizing: border-box;
+        }
+        section {
+        padding: 8px;
+        background-color: #f0f0f0;
+        overflow: auto;
+        }
+        section > div {
+        float: left;
+        padding: 4px;
+        }
+        section > div + div {
+        width: 40px;
+        text-align: center;
+        }
+        fieldset {
+        padding:10px;margin-top:10px;
+        }
+    </style>
+</head>
+<body>
+
+<section class="container">
+    <div>
+        <select id="leftValues" size="5" multiple>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+        </select>
+        <!--div>
+            <input type="text" id="txtLeft" />
+        </div-->
+    </div>
+    <div>
+        <input type="button" id="btnRight" key="&gt;&gt;" />
+        <input type="button" id="btnLeft" key="&lt;&lt;" />
+    </div>
+    <div>
+        <select id="rightValues" size="4" multiple>
+
+        </select>
+        <!--div>
+            <input type="text" id="txtRight" />
+        </div-->
+    </div>
+</sectio>
+
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<!--<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>-->
+<script>
+
+    $("#btnLeft").click(function () {
+    var selectedItem = $("#rightValues option:selected");
+    $("#leftValues").append(selectedItem);
+    });
+
+    $("#btnRight").click(function () {
+    var selectedItem = $("#leftValues option:selected");
+    $("#rightValues").append(selectedItem);
+    });
+
+    $("#rightValues").change(functio
+    n () {
+    //var selectedItem = $("#rightValues option:selected");
+    //$("#txtRight").val(selectedItem.text());
+    });
+    $("#leftValues").change(function () {
+    //var selectedItem = $("#leftValues option:selected");
+    //$("#txtLeft").val(selectedItem.text());
+    <!--$('#myModal').modal('show');-->
+
+    });
+</script>
+</body>
+</html>
