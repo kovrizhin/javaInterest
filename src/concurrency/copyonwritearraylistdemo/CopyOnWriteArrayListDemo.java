@@ -41,5 +41,13 @@ public class CopyOnWriteArrayListDemo
             empList2.add("Tom Smith");
       }
 
+      System.out.println("##################");
+
+      empIter = empList2.iterator();
+      while (empIter.hasNext())
+      {
+         System.out.println(empIter.next());
+      }
+
    }
 }

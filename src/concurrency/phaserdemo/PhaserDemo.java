@@ -35,7 +35,7 @@ public class PhaserDemo
 
    static void runTasks(List<Runnable> tasks) 
    {
-      final Phaser phaser = new Phaser(1); // "1" to register self
+      final Phaser phaser = new Phaser(2); // "1" to register self
       // create and start threads
       for (final Runnable task: tasks) 
       {
@@ -60,6 +60,7 @@ public class PhaserDemo
       }
 
       // allow threads to start and deregister self
+      phaser.arriveAndDeregister();
       phaser.arriveAndDeregister();
    }
 }

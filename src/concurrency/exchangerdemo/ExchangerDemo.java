@@ -7,15 +7,15 @@ import java.util.concurrent.Exchanger;
 
 public class ExchangerDemo
 {
-   static Exchanger<DataBuffer> exchanger = new Exchanger<DataBuffer>();
-   static DataBuffer initialEmptyBuffer = new DataBuffer();
-   static DataBuffer initialFullBuffer = new DataBuffer("ITEM");
+   private static Exchanger<DataBuffer> exchanger = new Exchanger<DataBuffer>();
+   private static DataBuffer initialEmptyBuffer = new DataBuffer();
+   private static DataBuffer initialFullBuffer = new DataBuffer("ITEM");
 
    public static void main(String[] args)
    {
       class FillingLoop implements Runnable 
       {
-         int count = 0;
+         private int count = 0;
 
          @Override
          public void run() 
@@ -40,7 +40,7 @@ public class ExchangerDemo
             }
          }
 
-         void addToBuffer(DataBuffer buffer)
+         private void addToBuffer(DataBuffer buffer)
          {
             String item = "NEWITEM"+count++;
             System.out.printf("Adding %s%n", item);
@@ -73,7 +73,7 @@ public class ExchangerDemo
             }
          }
 
-         void takeFromBuffer(DataBuffer buffer)
+         private void takeFromBuffer(DataBuffer buffer)
          {
             System.out.printf("taking %s%n", buffer.remove());
          }

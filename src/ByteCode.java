@@ -10,7 +10,7 @@ public class ByteCode {
         try {
             return "1";
         } finally {
-            System.out.println("a");
+            System.out.println("(\\d{1,4}-\\d{1,2}-\\d{1,2})()");
         }
     }
 }
