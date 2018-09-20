@@ -68,8 +68,8 @@ public class MaximizingMissionPoints2 {
         }
         int prev = -1;
         for (Integer integer : floors.keySet()) {
-            Collection<TreeSet<Point>> prevPointsList = floors.headMap(prev).values();
-            if (prevPointsList != null) {
+            Collection<TreeSet<Point>> prevPointsList = floors.headMap(prev, true).values();
+            if (prevPointsList.size() > 0) {
                 TreeSet<Point> points = floors.get(integer);
                 Iterator<Point> iterator1 = points.iterator();
                 while (iterator1.hasNext()){

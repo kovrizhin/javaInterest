@@ -45,14 +45,14 @@ Note that he cannot go directly from city  to city  as that would violate his ru
 
  */
 
-import com.sun.org.apache.xpath.internal.SourceTree;
-
-import java.time.LocalDateTime;
 import java.util.*;
 
-public class MaximizingMissionPoints3 {
+public class MaximizingMissionPoints6Best {
     public static void main(String[] args) {
         TreeMap<Integer, Point> floors = new TreeMap<>();
+
+        TreeSet<Point> pointAllX = new TreeSet<>(Comparator.comparingInt(o -> o.x));
+        TreeSet<Point> pointAllY = new TreeSet<>(Comparator.comparingInt(o -> o.y));
         Scanner in = new Scanner(System.in);
         int n = in.nextInt();
         int d_lat = in.nextInt();
@@ -65,43 +65,86 @@ public class MaximizingMissionPoints3 {
             int points = in.nextInt();
             Point e = new Point(latitude, longitude, points);
             floors.putIfAbsent(height, e);
+//            pointAllX.add(e);
+//            pointAllY.add(e);
         }
         Set<Integer> set = floors.keySet();
         Integer[] levels = set.toArray(new Integer[set.size()]);
-        TreeSet<Point> prevPointsX = new TreeSet<>(Comparator.comparingLong(o -> o.points));
+        TreeSet<Point> prevPoint = new TreeSet<>(Comparator.comparingLong(o -> o.points));
         for (Integer level : levels) {
 
-//            int start = LocalDateTime.now().getNano();
-            Point pointsX = floors.get(level);
-            Iterator<Point> iterator = prevPointsX.descendingIterator();
-            while (iterator.hasNext()) {
-                Point prevItem = iterator.next();
+            Point point = floors.get(level);
+            Point fromElement = new Point(point.x - d_lat, point.y - d_long, -1);
+            Point toElement = new Point(point.x + d_lat, point.y + d_long, -1);
+            SortedSet<Point> prevPointSliceX = pointAllX.subSet(fromElement, true, toElement, true);
+            SortedSet<Point> prevPointSliceY = pointAllY.subSet(fromElement, true, toElement, true);
+            if(prevPoint.size() < pointAllX.size() || prevPoint.size() < pointAllY.size()) {
+                Iterator<Point> iterator;
+                if (prevPointSliceX.size() < prevPointSliceY.size()) {
+                    prevPointSliceX.retainAll(prevPointSliceY);
+                    iterator = prevPointSliceX.iterator();
+                } else {
+                    prevPointSliceY.retainAll(prevPointSliceX);
+                    iterator = prevPointSliceY.iterator();
+                }
 
-                if (Math.abs(pointsX.x - prevItem.x) <= d_lat) {
-                    if (Math.abs(pointsX.y - prevItem.y) <= d_long) {
-                        if (pointsX.points + prevItem.points > pointsX.points) {
-                            pointsX.points = pointsX.points + prevItem.points;
+                long max = point.points;
+                while (iterator.hasNext()) {
+                    Point prevItem = iterator.next();
+                    if (Math.abs(point.x - prevItem.x) <= d_lat) {
+                        if (Math.abs(point.y - prevItem.y) <= d_long) {
+                            max = Math.max(max, point.points + prevItem.points);
                         }
-                        break;
+                    }
+                }
+                point.points = max;
+            } else {
+                Iterator<Point> iterator = prevPoint.descendingIterator();
+                while (iterator.hasNext()) {
+                    Point prevItem = iterator.next();
+                    if (Math.abs(point.x - prevItem.x) <= d_lat) {
+                        if (Math.abs(point.y - prevItem.y) <= d_long) {
+                            if (point.points + prevItem.points > point.points) {
+                                point.points = point.points + prevItem.points;
+                            }
+                            break;
+                        }
                     }
                 }
             }
-            if(pointsX.points > 0) {
-                prevPointsX.add(pointsX);
+            if (point.points > 0) {
+                prevPoint.add(point);
+                pointAllX.add(point);
             }
-            int stop = LocalDateTime.now().getNano();
-//            double dur = (stop - start) / 1_000_000_000.;
-//            System.out.println("Level :" + level + " duration: " + dur);
         }
         System.out.println(floors.values().stream().mapToLong(Point::getPoints).max().getAsLong());
 
         in.close();
     }
+
+    private static long getValue(int d_lat, int d_long, Point pointsX, Collection<TreeSet<Point>> pointValues) {
+
+        for (TreeSet<Point> pointValue : pointValues) {
+            NavigableSet<Point> points = pointValue.headSet(new Point(pointsX.x - d_lat, pointsX.y - d_long, -1), true);
+            for (Point point : points) {
+                if (Math.abs(pointsX.x - point.x) <= d_lat) {
+                    if (Math.abs(pointsX.y - point.y) <= d_long) {
+                        if (pointsX.points + point.points > pointsX.points) {
+                            return pointsX.points + point.points;
+                        }
+                    }
+                }
+
+            }
+        }
+        return pointsX.points;
+    }
+
     static class Point {
         final int x;
         final int y;
         long points;
-        public Point(int x, int y, int points) {
+        public Point(int x, int y, long points) {
             this.x = x;
             this.y = y;
             this.points = points;
