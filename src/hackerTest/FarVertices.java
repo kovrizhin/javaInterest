@@ -24,8 +24,8 @@ public class FarVertices {
             if (nodes[max -1] == null) {
                 nodes[max -1] = new TreeNode(max);
             }
-            nodes[min-1].getChilds().add(nodes[max-1]);
-            nodes[max-1].getChilds().add(nodes[min-1]);
+            nodes[min-1].getChild().add(nodes[max-1]);
+            nodes[max-1].getChild().add(nodes[min-1]);
 
         }
 
@@ -46,10 +46,10 @@ public class FarVertices {
 
     private static void countEdges(TreeNode root, int[] counts, TreeNode current, TreeNode parent, int deep, int maxSize) {
         if(deep < maxSize) {
-            counts[root.getId() - 1] += current.getChilds().size();
-            for (int i = 0; i < current.getChilds().size(); i++) {
-                if(parent.getId() != current.getChilds().get(i).getId()){
-                    countEdges(root, counts, current.getChilds().get(i), current,deep+1, maxSize);
+            counts[root.getId() - 1] += current.getChild().size();
+            for (int i = 0; i < current.getChild().size(); i++) {
+                if(parent.getId() != current.getChild().get(i).getId()){
+                    countEdges(root, counts, current.getChild().get(i), current,deep+1, maxSize);
                     break;
                 } else {
                     counts[root.getId() - 1]--;
